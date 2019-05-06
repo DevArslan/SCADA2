@@ -82,19 +82,21 @@
 
 </script>
 
+
 <script type="text/javascript">
 
   var socket_url = 'ws://' + window.location.host + window.location.pathname
 
   var socket = new WebSocket(socket_url)
-
-  socket.onmessage = function (event) {
+socket.onopen = function (event) {
+    console.log('socket opened',event) 
+  }
+ socket.onmessage = function (event) {
     console.log(event)
   }
 
-  socket.onopen = function (event) {
-    console.log('socket opened',event) 
-  }
+  
+
 
 
 </script>
