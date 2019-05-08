@@ -4,6 +4,7 @@ import psycopg2
 from channels.db import database_sync_to_async
 import psycopg2.extensions
 from channels.consumer import AsyncConsumer
+from channels.generic.websocket import AsyncJsonWebsocketConsumer
 from django.db.models.signals import post_save
 
 
@@ -37,7 +38,7 @@ class ChartConsumer(AsyncConsumer):
 		curs = conn.cursor()
 		curs.execute("LISTEN events;")
 
-		print ("Waiting for notifications on channel 'DataOPC'")
+		print ("Waiting for notifications on channel 'DatasetOPC'")
 		while True:
 		    if select.select([conn],[],[],2) == ([],[],[]):
 		        print ("Timeout")
@@ -46,6 +47,4 @@ class ChartConsumer(AsyncConsumer):
 		        while conn.notifies:
 		            notify = conn.notifies.pop(0)
 		            return (notify.payload)	
-
-#notify.pid , notify.channel,
 	
