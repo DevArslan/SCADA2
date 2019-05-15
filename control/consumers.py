@@ -19,13 +19,13 @@ class ChartConsumer(AsyncConsumer):
 		await self.send({
 			'type': 'websocket.accept'
 			})
-		for i in range (1,10):
+		for i in range (1,1000):
 			var = await self.get_data_opc()	
 			await self.send({
 			'type': 'websocket.send',
 			'text': var,
 			})
-			await asyncio.sleep(2)
+			await asyncio.sleep(0.5)
 		
 		
 
