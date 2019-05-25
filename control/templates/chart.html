@@ -174,9 +174,14 @@
     }
 
     function addData(chart, label, data) {
+
       chart.data.labels.push(label);
+      chart.data.labels = chart.data.labels.slice(-10);
       chart.data.datasets.forEach((dataset) => {
         dataset.data.push(data);
+      });
+      chart.data.datasets.forEach((dataset) => {
+        dataset.data = dataset.data.slice(-10);
       });
       chart.update();
     }
