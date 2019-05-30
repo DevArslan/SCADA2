@@ -3,68 +3,81 @@
 
 {% block content %}
 <nav class="navbar navbar-dark bg-dark shadow">
-  <a class="navbar-brand" href="">SCADA</a>
-  <ul class="navbar-nav">
-    <li class="nav-item">
-      <button class="btn btn-info btn-lg" type="button" data-toggle="modal" data-target="#regForm">Logout</button>
-    </li>
-  </ul>
+<a class="navbar-brand" href="">SCADA</a>
+<ul class="navbar-nav">
+  <li class="nav-item">
+    <button class="btn btn-info btn-lg" type="button" data-toggle="modal" data-target="#regForm">Logout</button>
+  </li>
+</ul>
 </nav>
 <div class="container-fluid">
-  <div class="row">
-    <nav class="col-md-2 bg-light sidebar">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" href="/profile">Мой профиль</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/database">База данных</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/control">Мониторинг</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Статистика</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">FAQ</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">О нас</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="col-md-10">
-      <canvas id="myChart" width="800" height="300"></canvas>
-    </div>
-
-
-
+<div class="row">
+  <nav class="col-md-2 bg-light sidebar">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+        <a class="nav-link" href="/profile">Мой профиль</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/database">База данных</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/control">Мониторинг</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Статистика</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">FAQ</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">О нас</a>
+      </li>
+    </ul>
+  </nav>
+  <div class="col-md-10">
+    <canvas id="myChart" width="800" height="300"></canvas>
   </div>
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-2 offset-md-2">
-        <div class="error_div">
-          <div class="row row_error">
-            <div class="text_error">
-              Ошибка:
-            </div>
-            <div id="error"></div>
-          </div>  
+
+
+</div>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-2 offset-md-2">
+      <div class="error_div">
+        <div class="row row_error">
+          <div class="text_error">
+            Ошибка:
+          </div>
+          <div id="error"></div>
         </div>  
-      </div>
-      <div class="col-md-2 offset-md-1">
-        <form id="setpoint_form"  action=" " method="POST">
-          <input class="sp_form" placeholder="Введите setpoint" type="text" name="sp" id="setpoint">
-          {% csrf_token %}
-          <input type="submit" class="btn btn-success" value="Принять">
-        </form>  
-      </div>
+      </div>  
     </div>
-    
+    <div class="col-md-2 offset-md-1">
+      <form id="setpoint_form"  action=" " method="POST">
+        <input class="sp_form" placeholder="Введите setpoint" type="text" name="sp" id="setpoint">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-success" value="Принять">
+      </form>  
+    </div>
+    <div class="col-md-2 offset-md-1">
+      <form id="get_data_button"  action=" " method="POST"> 
+        <input type="submit" class="btn btn-success" value="Получить данные">
+        {% csrf_token %}
+      </form>  
+    </div>
+    <div class="col-md-2 offset-md-1">
+      <form id="get_data_close"  action=" " method="POST"> 
+        <input type="submit" class="btn btn-success" value="Завершить работу">
+        {% csrf_token %}
+      </form>  
+    </div>
+
   </div>
   
+  
+</div>
 
 
 
@@ -85,107 +98,123 @@
 
 
 
-  <script type="text/javascript">
 
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [],
-        datasets: [{
-          label: 'Переходная характеристика',
-          data: [],
-          backgroundColor: [
-          'rgba(255, 99, 132, 0.2)',
-          'rgba(54, 162, 235, 0.2)',
-          'rgba(255, 206, 86, 0.2)',
-          'rgba(75, 192, 192, 0.2)',
-          'rgba(153, 102, 255, 0.2)',
-          'rgba(255, 159, 64, 0.2)'
-          ],
-          borderColor: [
-          'rgba(255, 99, 132, 1)',
-          'rgba(54, 162, 235, 1)',
-          'rgba(255, 206, 86, 1)',
-          'rgba(75, 192, 192, 1)',
-          'rgba(153, 102, 255, 1)',
-          'rgba(255, 159, 64, 1)'
-          ],
-          borderWidth: 1
+<script type="text/javascript">
+
+  var ctx = document.getElementById('myChart').getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Переходная характеристика',
+        data: [],
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+        ],
+        borderColor: [
+        'rgba(255, 99, 132, 1)',
+        'rgba(54, 162, 235, 1)',
+        'rgba(255, 206, 86, 1)',
+        'rgba(75, 192, 192, 1)',
+        'rgba(153, 102, 255, 1)',
+        'rgba(255, 159, 64, 1)'
+        ],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
         }]
-      },
-      options: {
-        scales: {
-          yAxes: [{
-            ticks: {
-              beginAtZero: true
-            }
-          }]
-        }
       }
-    });
-
-    <!-- setInterval(chart_func,1000) -->
-  </script>
-
-
-  <script type="text/javascript">
-
-
-
-
-
-
-    var socket_url = 'ws://' + window.location.host + window.location.pathname
-
-    var socket = new WebSocket(socket_url)
-    socket.onopen = function (event) {
-      console.log('socket opened',event) 
     }
-    number = []
-    value = []
-    var setpoint_form = $("#setpoint_form")
-    setpoint_form.submit(function(e){
-      e.preventDefault()
-      setpoint_value = $("#setpoint").val()
-      console.log(setpoint_value)
+  });
+
+  <!-- setInterval(chart_func,1000) -->
+</script>
+
+
+<script type="text/javascript">
+
+
+
+
+
+
+  var socket_url = 'ws://' + window.location.host + window.location.pathname
+
+  var socket = new WebSocket(socket_url)
+  socket.onopen = function (event) {
+    console.log('socket opened',event);
+    
+    var get_data_button = $("#get_data_button");
+    get_data_button.submit(function(e){
+      e.preventDefault();
+    socket.send("ON")
     })
-    socket.onmessage = function (event) {
-      console.log(event);
 
-      var data = event.data;
-
-      data_js = JSON.parse(data);
-
-      id = data_js.data.id
-      total = data_js.data.total
+    var get_data_close = $("#get_data_close");
+    get_data_close.submit(function(e){
+      e.preventDefault();
+    socket.send("OFF")
+    })
 
 
+  }
 
 
-      addData(myChart, id, total)
-      error(total,setpoint_value)
-    }
-    function error(total, setpoint_value) {
-      error_value = setpoint_value - total
-      console.log('Ошибка: ',error_value)
-      document.getElementById("error").innerHTML =error_value;
-      console.log(setpoint_value)
-    }
-
-    function addData(chart, label, data) {
-
-      chart.data.labels.push(label);
-      chart.data.labels = chart.data.labels.slice(-10);
-      chart.data.datasets.forEach((dataset) => {
-        dataset.data.push(data);
-      });
-      chart.data.datasets.forEach((dataset) => {
-        dataset.data = dataset.data.slice(-10);
-      });
-      chart.update();
-    }
-  </script>
 
 
-  {% endblock %}
+
+
+  number = []
+  value = []
+  
+  socket.onmessage = function (event) {
+    console.log(event);
+
+    var data = event.data;
+
+    data_js = JSON.parse(data);
+
+    id = data_js.data.id
+    total = data_js.data.total
+
+
+
+
+    addData(myChart, id, total)
+    error(total,setpoint_value)
+  }
+  function error(total, setpoint_value) {
+    error_value = setpoint_value - total
+    console.log('Ошибка: ',error_value)
+    document.getElementById("error").innerHTML =error_value;
+    console.log(setpoint_value)
+  }
+
+  function addData(chart, label, data) {
+
+    chart.data.labels.push(label);
+    chart.data.labels = chart.data.labels.slice(-10);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+    });
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data = dataset.data.slice(-10);
+    });
+    chart.update();
+  }
+</script>
+
+
+{% endblock %}

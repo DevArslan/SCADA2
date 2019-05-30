@@ -19,18 +19,25 @@ class ChartConsumer(AsyncConsumer):
 		await self.send({
 			'type': 'websocket.accept'
 			})
-		for i in range (1,1000):
-			var = await self.get_data_opc()	
+		
+		
+	async def websocket_receive(self, event):
+		
+		if event.get("text") == "OFF":
+			print("OFF")
+
+		if event.get("text") == "ON":
+
+			var = await self.get_data_opc(event)	
 			await self.send({
 			'type': 'websocket.send',
 			'text': var,
+
 			})
-			await asyncio.sleep(0.5)
-		
-		
+
 
 	@database_sync_to_async
-	def get_data_opc(self):
+	def get_data_opc(self,event):
 
 		conn = psycopg2.connect("host='localhost' dbname='postgres' user='postgres' password='Direling2017'")
 		conn.set_isolation_level(psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
@@ -39,7 +46,7 @@ class ChartConsumer(AsyncConsumer):
 		curs.execute("LISTEN events;")
 
 		print ("Waiting for notifications on channel 'DatasetOPC'")
-		while True:
+		while event.get("text") == "ON":
 		    if select.select([conn],[],[],2) == ([],[],[]):
 		        print ("Timeout")
 		    else:
